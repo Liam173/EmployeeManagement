@@ -22,9 +22,19 @@ namespace EmployeeManagement.Services
             return _repository.GetById(id);
         }
 
+        public bool ValidateEmployee(Employee employee)
+        {
+            return _repository.Validate(employee);
+        }
+
         public void AddEmployee(Employee employee) 
         {
             _repository.Add(employee);
+        }
+
+        public void UpdateEmployee(int id, Employee employee) 
+        {
+            _repository.Update(id, employee);
         }
     }
 }

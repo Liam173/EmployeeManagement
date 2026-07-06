@@ -1,5 +1,6 @@
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Repositories;
+using EmployeeManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<EmployeeService>();
 
 var app = builder.Build();
 

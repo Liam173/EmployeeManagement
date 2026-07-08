@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.Exceptions;
+﻿using EmployeeManagement.DTOs;
+using EmployeeManagement.Exceptions;
 using EmployeeManagement.Models;
 using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEmployee(Employee employee)
+        public IActionResult CreateEmployee(CreateEmployeeDto employee)
         {
             if (!_service.ValidateEmployee(employee))
                 return BadRequest();
@@ -51,7 +52,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateEmployee(int id, Employee employee)
+        public IActionResult UpdateEmployee(int id, UpdateEmployeeDto employee)
         {
             try
             {

@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.Interfaces;
+﻿using EmployeeManagement.Exceptions;
+using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
 
 namespace EmployeeManagement.Repositories
@@ -42,23 +43,23 @@ namespace EmployeeManagement.Repositories
         public void Update(int id, Employee employee)
         {
             var existingEmployee = GetById(id);
-            if (existingEmployee != null)
-            {
-                existingEmployee.Name = employee.Name;
-                existingEmployee.Age = employee.Age;
-                existingEmployee.Salary = employee.Salary;
-            }
+
+            if (existingEmployee == null)
+                throw new EmployeeNotFoundException(id);
+
+            existingEmployee.Name = employee.Name;
+            existingEmployee.Age = employee.Age;
+            existingEmployee.Salary = employee.Salary;
         }
 
         public void Delete(int id)
         {
             var existingEmployee = GetById(id);
-            if (existingEmployee != null)
-            {
-                existingEmployee.Name = "";
-                existingEmployee.Age = 0;
-                existingEmployee.Salary = 0;
-            }
+
+            if (existingEmployee == null)
+                throw new EmployeeNotFoundException(id);
+
+            _employees.Remove(existingEmployee);
         }
     }
 }

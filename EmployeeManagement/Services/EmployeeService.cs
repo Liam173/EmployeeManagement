@@ -24,16 +24,16 @@ namespace EmployeeManagement.Services
 
         public bool ValidateEmployee(Employee employee)
         {
-            if (employee.Id < 0)
+            if (employee == null)
                 return false;
 
-            if (string.IsNullOrEmpty(employee.Name))
+            if (string.IsNullOrWhiteSpace(employee.Name))
                 return false;
 
             if (employee.Age < 18)
                 return false;
 
-            if (employee.Salary < 0)
+            if (employee.Salary <= 0)
                 return false;
 
             return true;

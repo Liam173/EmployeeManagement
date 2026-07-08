@@ -56,7 +56,6 @@ namespace EmployeeManagement.Controllers
             try
             {
                 _service.UpdateEmployee(id, employee);
-
                 return NoContent();
             }
             catch (EmployeeNotFoundException)
@@ -68,11 +67,15 @@ namespace EmployeeManagement.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteEmployee(int id)
         {
-            if (_service.GetEmployeeById(id) == null)
+            try
+            {
+                _service.DeleteEmployee(id);
+                return NoContent();
+            }
+            catch (EmployeeNotFoundException)
+            {
                 return NotFound();
-
-            _service.DeleteEmployee(id);
-            return NoContent();
+            }
         }
     }
 }

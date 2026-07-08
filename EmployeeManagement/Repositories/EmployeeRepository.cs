@@ -34,23 +34,6 @@ namespace EmployeeManagement.Repositories
             return _employees.FirstOrDefault(e => e.Id == id);
         }
 
-        public bool Validate(Employee employee)
-        {
-            if (employee.Id < 0)
-                return false;
-
-            if (string.IsNullOrEmpty(employee.Name))
-                return false;
-
-            if (employee.Age < 18)
-                return false;
-
-            if (employee.Salary < 0)
-                return false;
-
-            return true;
-        }
-
         public void Add(Employee employee)
         {
             _employees.Add(employee);
@@ -64,6 +47,17 @@ namespace EmployeeManagement.Repositories
                 existingEmployee.Name = employee.Name;
                 existingEmployee.Age = employee.Age;
                 existingEmployee.Salary = employee.Salary;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            var existingEmployee = GetById(id);
+            if (existingEmployee != null)
+            {
+                existingEmployee.Name = "";
+                existingEmployee.Age = 0;
+                existingEmployee.Salary = 0;
             }
         }
     }

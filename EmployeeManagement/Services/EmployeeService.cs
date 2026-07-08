@@ -24,7 +24,19 @@ namespace EmployeeManagement.Services
 
         public bool ValidateEmployee(Employee employee)
         {
-            return _repository.Validate(employee);
+            if (employee.Id < 0)
+                return false;
+
+            if (string.IsNullOrEmpty(employee.Name))
+                return false;
+
+            if (employee.Age < 18)
+                return false;
+
+            if (employee.Salary < 0)
+                return false;
+
+            return true;
         }
 
         public void AddEmployee(Employee employee) 
@@ -35,6 +47,11 @@ namespace EmployeeManagement.Services
         public void UpdateEmployee(int id, Employee employee) 
         {
             _repository.Update(id, employee);
+        }
+
+        public void DeleteEmployee(int id)
+        {
+            _repository.Delete(id);
         }
     }
 }

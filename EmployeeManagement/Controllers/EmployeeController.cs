@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.Models;
+﻿using EmployeeManagement.Exceptions;
+using EmployeeManagement.Models;
 using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -22,7 +23,7 @@ namespace EmployeeManagement.Controllers
             var employees = _service.GetAllEmployees();
 
             if (employees.Count == 0)
-                return NotFound();
+                return Ok(new List<Employee>());
 
             return Ok(employees);
         }
@@ -49,23 +50,28 @@ namespace EmployeeManagement.Controllers
             return Created();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult UpdateEmployee(int id, Employee employee)
         {
-            if (_service.GetEmployeeById(id) == null)
-                return NotFound();
+            try
+            {
+                _service.UpdateEmployee(id, employee);
 
-           _service.UpdateEmployee(id, employee);
-            return NoContent();
+                return NoContent();
+            }
+            catch (EmployeeNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteEmployee(int id)
         {
             if (_service.GetEmployeeById(id) == null)
                 return NotFound();
 
-            // TODO: Delete the employee
+            _service.DeleteEmployee(id);
             return NoContent();
         }
     }

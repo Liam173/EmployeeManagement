@@ -8,10 +8,10 @@ namespace EmployeeManagement.Interfaces
 
         Employee? GetById(int id);
 
-        bool Validate(Employee employee);
-
         void Add(Employee employee);
 
         void Update(int id, Employee employee);
+
+        void Delete(int id);
     }
 }

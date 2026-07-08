@@ -1,5 +1,8 @@
-﻿using EmployeeManagement.Services;
+﻿using EmployeeManagement.Exceptions;
+using EmployeeManagement.Models;
+using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EmployeeManagement.Controllers
 {
@@ -19,7 +22,60 @@ namespace EmployeeManagement.Controllers
         {
             var employees = _service.GetAllEmployees();
 
+            if (employees.Count == 0)
+                return Ok(new List<Employee>());
+
             return Ok(employees);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetEmployeeById(int id)
+        {
+            var employee = _service.GetEmployeeById(id);
+
+            if (employee == null)
+                return NotFound();
+
+            return Ok(employee);
+        }
+
+        [HttpPost]
+        public IActionResult CreateEmployee(Employee employee)
+        {
+            if (!_service.ValidateEmployee(employee))
+                return BadRequest();
+
+            _service.AddEmployee(employee);
+
+            return Created();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateEmployee(int id, Employee employee)
+        {
+            try
+            {
+                _service.UpdateEmployee(id, employee);
+                return NoContent();
+            }
+            catch (EmployeeNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteEmployee(int id)
+        {
+            try
+            {
+                _service.DeleteEmployee(id);
+                return NoContent();
+            }
+            catch (EmployeeNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }

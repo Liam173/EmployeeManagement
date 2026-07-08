@@ -22,9 +22,36 @@ namespace EmployeeManagement.Services
             return _repository.GetById(id);
         }
 
+        public bool ValidateEmployee(Employee employee)
+        {
+            if (employee == null)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(employee.Name))
+                return false;
+
+            if (employee.Age < 18)
+                return false;
+
+            if (employee.Salary <= 0)
+                return false;
+
+            return true;
+        }
+
         public void AddEmployee(Employee employee) 
         {
             _repository.Add(employee);
+        }
+
+        public void UpdateEmployee(int id, Employee employee) 
+        {
+            _repository.Update(id, employee);
+        }
+
+        public void DeleteEmployee(int id)
+        {
+            _repository.Delete(id);
         }
     }
 }

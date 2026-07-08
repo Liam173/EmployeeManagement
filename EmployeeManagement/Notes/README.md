@@ -9,10 +9,10 @@ API system that will be used from this point further to create a robust real wor
 - ✅ Repositories
 - ✅ Dependency Injection
 - ✅ CRUD
+- ✅ DTOs
 
 ## Upcoming
 
-- 🚧 DTOs
 - 🚧 AutoMapper
 - 🚧 Entity Framework Core
 - 🚧 SQL Server

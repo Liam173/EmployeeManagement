@@ -43,7 +43,7 @@ namespace EmployeeManagement.Controllers
         [HttpPost]
         public IActionResult CreateEmployee(CreateEmployeeDto employee)
         {
-            if (!_service.ValidateEmployee(employee))
+            if (!_service.ValidateCreateEmployee(employee))
                 return BadRequest();
 
             _service.AddEmployee(employee);

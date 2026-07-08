@@ -40,7 +40,7 @@ namespace EmployeeManagement.Services
             };
         }
 
-        public bool ValidateEmployee(CreateEmployeeDto employee)
+        public bool ValidateCreateEmployee(CreateEmployeeDto employee)
         {
             if (employee == null)
                 return false;

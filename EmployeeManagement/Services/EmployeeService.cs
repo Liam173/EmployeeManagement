@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.Interfaces;
+﻿using EmployeeManagement.DTOs;
+using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
 
 namespace EmployeeManagement.Services
@@ -12,17 +13,34 @@ namespace EmployeeManagement.Services
             _repository = repository;
         }
 
-        public List<Employee> GetAllEmployees()
+        public List<EmployeeDto> GetAllEmployees()
         {
-            return _repository.GetAll();
+            var employees = _repository.GetAll();
+
+            return employees.Select(e => new EmployeeDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Age = e.Age
+            }).ToList();
         }
 
-        public Employee? GetEmployeeById(int id)
+        public EmployeeDto? GetEmployeeById(int id)
         {
-            return _repository.GetById(id);
+            var employee = _repository.GetById(id);
+
+            if (employee == null)
+                return null;
+
+            return new EmployeeDto
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Age = employee.Age
+            };
         }
 
-        public bool ValidateEmployee(Employee employee)
+        public bool ValidateCreateEmployee(CreateEmployeeDto employee)
         {
             if (employee == null)
                 return false;
@@ -39,13 +57,27 @@ namespace EmployeeManagement.Services
             return true;
         }
 
-        public void AddEmployee(Employee employee) 
+        public void AddEmployee(CreateEmployeeDto dto) 
         {
+            var employee = new Employee
+            {
+                Name = dto.Name,
+                Age = dto.Age,
+                Salary = dto.Salary
+            };
+
             _repository.Add(employee);
         }
 
-        public void UpdateEmployee(int id, Employee employee) 
+        public void UpdateEmployee(int id, UpdateEmployeeDto dto) 
         {
+            var employee = new Employee
+            {
+                Name = dto.Name,
+                Age = dto.Age,
+                Salary = dto.Salary
+            };
+
             _repository.Update(id, employee);
         }
 

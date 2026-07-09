@@ -27,3 +27,15 @@ This keeps the API contract independent from the database model, prevents exposi
 and allows the internal model to evolve without breaking API consumers.
 
 -----------------------------------------------------------------------
+
+# Question 3:
+
+What problem does AutoMapper solve?
+
+# Answer:
+
+AutoMapper eliminates repetitive object-to-object mapping code by automatically copying matching properties between types. 
+
+It keeps services cleaner, reduces boilerplate, and centralizes mapping configuration, making the codebase easier to maintain.
+
+-----------------------------------------------------------------------

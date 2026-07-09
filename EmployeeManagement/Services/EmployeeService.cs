@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.DTOs;
+﻿using AutoMapper;
+using EmployeeManagement.DTOs;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
 
@@ -7,22 +8,21 @@ namespace EmployeeManagement.Services
     public class EmployeeService
     {
         private readonly IEmployeeRepository _repository;
+        private readonly IMapper _mapper;
 
-        public EmployeeService(IEmployeeRepository repository)
+        public EmployeeService(
+            IEmployeeRepository repository,
+            IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public List<EmployeeDto> GetAllEmployees()
         {
             var employees = _repository.GetAll();
 
-            return employees.Select(e => new EmployeeDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Age = e.Age
-            }).ToList();
+            return _mapper.Map<List<EmployeeDto>>(employees);
         }
 
         public EmployeeDto? GetEmployeeById(int id)
@@ -32,12 +32,7 @@ namespace EmployeeManagement.Services
             if (employee == null)
                 return null;
 
-            return new EmployeeDto
-            {
-                Id = employee.Id,
-                Name = employee.Name,
-                Age = employee.Age
-            };
+            return _mapper.Map<EmployeeDto>(employee);
         }
 
         public bool ValidateCreateEmployee(CreateEmployeeDto employee)
@@ -59,26 +54,12 @@ namespace EmployeeManagement.Services
 
         public void AddEmployee(CreateEmployeeDto dto) 
         {
-            var employee = new Employee
-            {
-                Name = dto.Name,
-                Age = dto.Age,
-                Salary = dto.Salary
-            };
-
-            _repository.Add(employee);
+            _repository.Add(_mapper.Map<Employee>(dto));
         }
 
         public void UpdateEmployee(int id, UpdateEmployeeDto dto) 
         {
-            var employee = new Employee
-            {
-                Name = dto.Name,
-                Age = dto.Age,
-                Salary = dto.Salary
-            };
-
-            _repository.Update(id, employee);
+            _repository.Update(id, _mapper.Map<Employee>(dto));
         }
 
         public void DeleteEmployee(int id)

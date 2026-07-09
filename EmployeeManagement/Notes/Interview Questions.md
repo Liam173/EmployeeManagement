@@ -39,3 +39,17 @@ AutoMapper eliminates repetitive object-to-object mapping code by automatically 
 It keeps services cleaner, reduces boilerplate, and centralizes mapping configuration, making the codebase easier to maintain.
 
 -----------------------------------------------------------------------
+
+# Question 4:
+
+Why shouldn't controllers contain AutoMapper code?
+
+# Answer:
+
+The controller's responsibility is handling HTTP requests and responses. 
+
+Mapping between DTOs and domain models is part of the application's business flow, so it belongs in the service layer. 
+
+Keeping mapping out of controllers keeps them thin, easier to maintain, and follows the Single Responsibility Principle.
+
+-----------------------------------------------------------------------

@@ -1,7 +1,10 @@
 using EmployeeManagement.Interfaces;
+using EmployeeManagement.Profiles;
 using EmployeeManagement.Repositories;
 using EmployeeManagement.Services;
-using EmployeeManagement.Mappings;
+using EmployeeManagement.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateEmployeeValidator>();
 
 var app = builder.Build();
 

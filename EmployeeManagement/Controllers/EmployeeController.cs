@@ -3,7 +3,6 @@ using EmployeeManagement.Exceptions;
 using EmployeeManagement.Models;
 using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace EmployeeManagement.Controllers
 {
@@ -41,22 +40,19 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEmployee(CreateEmployeeDto employee)
+        public IActionResult CreateEmployee(CreateEmployeeDto dto)
         {
-            if (!_service.ValidateCreateEmployee(employee))
-                return BadRequest();
-
-            _service.AddEmployee(employee);
+            _service.AddEmployee(dto);
 
             return Created();
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateEmployee(int id, UpdateEmployeeDto employee)
+        public IActionResult UpdateEmployee(int id, UpdateEmployeeDto dto)
         {
             try
             {
-                _service.UpdateEmployee(id, employee);
+                _service.UpdateEmployee(id, dto);
                 return NoContent();
             }
             catch (EmployeeNotFoundException)

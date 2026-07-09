@@ -2,7 +2,7 @@
 using EmployeeManagement.DTOs;
 using EmployeeManagement.Models;
 
-namespace EmployeeManagement.Mappings
+namespace EmployeeManagement.Profiles
 {
     public class EmployeeProfile : Profile
     {

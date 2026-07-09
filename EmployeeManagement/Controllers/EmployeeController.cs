@@ -3,7 +3,6 @@ using EmployeeManagement.Exceptions;
 using EmployeeManagement.Models;
 using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace EmployeeManagement.Controllers
 {

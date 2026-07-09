@@ -1,6 +1,5 @@
-using EmployeeManagement.DTOs;
 using EmployeeManagement.Interfaces;
-using EmployeeManagement.Mappings;
+using EmployeeManagement.Profiles;
 using EmployeeManagement.Repositories;
 using EmployeeManagement.Services;
 using EmployeeManagement.Validators;

@@ -5,6 +5,8 @@ using EmployeeManagement.Services;
 using EmployeeManagement.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using EmployeeManagement.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,9 @@ builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddAutoMapper(typeof(EmployeeProfile));
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateEmployeeValidator>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

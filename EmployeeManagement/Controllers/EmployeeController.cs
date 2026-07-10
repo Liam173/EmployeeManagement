@@ -20,23 +20,13 @@ namespace EmployeeManagement.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var employees = _service.GetAllEmployees();
-
-            if (employees.Count == 0)
-                return Ok(new List<Employee>());
-
-            return Ok(employees);
+            return Ok(_service.GetAllEmployees());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetEmployeeById(int id)
         {
-            var employee = _service.GetEmployeeById(id);
-
-            if (employee == null)
-                return NotFound();
-
-            return Ok(employee);
+            return Ok(_service.GetEmployeeById(id));
         }
 
         [HttpPost]
@@ -50,29 +40,17 @@ namespace EmployeeManagement.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateEmployee(int id, UpdateEmployeeDto dto)
         {
-            try
-            {
-                _service.UpdateEmployee(id, dto);
-                return NoContent();
-            }
-            catch (EmployeeNotFoundException)
-            {
-                return NotFound();
-            }
+            _service.UpdateEmployee(id, dto);
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteEmployee(int id)
         {
-            try
-            {
-                _service.DeleteEmployee(id);
-                return NoContent();
-            }
-            catch (EmployeeNotFoundException)
-            {
-                return NotFound();
-            }
+            _service.DeleteEmployee(id);
+
+            return NoContent();
         }
     }
 }

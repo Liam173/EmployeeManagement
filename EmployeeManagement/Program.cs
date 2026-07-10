@@ -7,6 +7,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using EmployeeManagement.Data;
 using Microsoft.EntityFrameworkCore;
+using EmployeeManagement.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthorization();
 

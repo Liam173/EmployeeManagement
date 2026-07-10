@@ -131,3 +131,15 @@ allowing log aggregation tools to filter, search, and analyze logs by those valu
 It produces richer, more queryable logs while still generating the same readable message.
 
 -----------------------------------------------------------------------
+
+# Question 11:
+
+Why would you use IOptions<T> instead of IConfiguration?
+
+# Answer:
+
+IOptions<T> binds a specific configuration section to a strongly typed class, making the code easier to read, test, and maintain. 
+
+It also limits a class to only the configuration it needs, instead of giving it access to the entire application configuration through IConfiguration.
+
+-----------------------------------------------------------------------

@@ -31,28 +31,15 @@ namespace EmployeeManagement.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(int id, Employee employee)
+        public void Update()
         {
-            var existingEmployee = _context.Employees.Find(id);
-
-            if (existingEmployee == null)
-                throw new EmployeeNotFoundException(id);
-
-            existingEmployee.Name = employee.Name;
-            existingEmployee.Age = employee.Age;
-            existingEmployee.Salary = employee.Salary;
-
             _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(Employee employee)
         {
-            var existingEmployee = _context.Employees.Find(id);
+            _context.Employees.Remove(employee);
 
-            if (existingEmployee == null)
-                throw new EmployeeNotFoundException(id);
-
-            _context.Employees.Remove(existingEmployee);
             _context.SaveChanges();
         }
     }

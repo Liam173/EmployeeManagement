@@ -10,8 +10,8 @@ namespace EmployeeManagement.Interfaces
 
         void Add(Employee employee);
 
-        void Update(int id, Employee employee);
+        void Update();
 
-        void Delete(int id);
+        void Delete(Employee employee);
     }
 }

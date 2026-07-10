@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EmployeeManagement.DTOs;
+using EmployeeManagement.Exceptions;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
 
@@ -30,7 +31,7 @@ namespace EmployeeManagement.Services
             var employee = _repository.GetById(id);
 
             if (employee == null)
-                return null;
+                throw new EmployeeNotFoundException(id);
 
             return _mapper.Map<EmployeeDto>(employee);
         }

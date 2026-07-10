@@ -31,7 +31,7 @@ namespace EmployeeManagement.Repositories
             _context.SaveChanges();
         }
 
-        public void Update()
+        public void SaveChanges()
         {
             _context.SaveChanges();
         }

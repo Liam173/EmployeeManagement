@@ -25,7 +25,7 @@ namespace EmployeeManagement.Services
         public List<EmployeeDto> GetAllEmployees()
         {
             _logger.LogInformation(
-                "Attempting to get all employees.");
+                "Retrieving all employees.");
 
             var employees = _repository.GetAll();
 
@@ -35,7 +35,7 @@ namespace EmployeeManagement.Services
         public EmployeeDto GetEmployeeById(int id)
         {
             _logger.LogInformation(
-                "Attempting to get employee {EmployeeId}.",
+                "Retrieving employee {EmployeeId}.",
                 id);
 
             var employee = _repository.GetById(id);
@@ -55,12 +55,12 @@ namespace EmployeeManagement.Services
         public void AddEmployee(CreateEmployeeDto dto) 
         {
             _logger.LogInformation(
-                "Attempting to add new employee.");
+                "Creating new employee.");
 
             _repository.Add(_mapper.Map<Employee>(dto));
 
             _logger.LogInformation(
-                "Employee was added succesfully.");
+                "Employee was added successfully.");
         }
 
         public void UpdateEmployee(int id, UpdateEmployeeDto dto) 
@@ -84,7 +84,7 @@ namespace EmployeeManagement.Services
             existingEmployee.Age = dto.Age;
             existingEmployee.Salary = dto.Salary;
 
-            _repository.Update();
+            _repository.SaveChanges();
 
             _logger.LogInformation(
                 "Employee {EmployeeId} was updated successfully.",

@@ -104,3 +104,17 @@ connection string, and other EF-specific options.
 So although a DbContext has a scoped lifetime, we don't register it manually with AddScoped(). We let EF Core do it correctly.
 
 -----------------------------------------------------------------------
+
+# Question 9:
+
+Why do we inject ILogger<EmployeeService> instead of just ILogger?
+
+# Answer:
+
+ILogger<T> automatically associates log entries with the class that created them. 
+
+This provides a logging category, making it much easier to filter, search, and troubleshoot logs in production. 
+
+It also avoids manually specifying class names in every log message and keeps logging consistent across the application.
+
+-----------------------------------------------------------------------

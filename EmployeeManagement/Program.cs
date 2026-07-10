@@ -8,6 +8,7 @@ using FluentValidation.AspNetCore;
 using EmployeeManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using EmployeeManagement.Middleware;
+using EmployeeManagement.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateEmployeeValidator>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<EmailService>();
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
 
 var app = builder.Build();
 

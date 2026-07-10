@@ -53,3 +53,54 @@ Mapping between DTOs and domain models is part of the application's business flo
 Keeping mapping out of controllers keeps them thin, easier to maintain, and follows the Single Responsibility Principle.
 
 -----------------------------------------------------------------------
+
+# Question 5:
+
+ORM stands for?
+
+# Answer:
+
+Object Relational Mapper.
+
+-----------------------------------------------------------------------
+
+# Question 6:
+
+What are Entity Framework Migrations?
+
+# Answer:
+
+Entity Framework Migrations are version-controlled changes to the database schema. 
+
+They allow the database to evolve alongside the application's code by generating incremental changes—such as creating tables, adding columns, 
+or modifying relationships—without losing existing data. 
+
+Migrations ensure the database structure remains synchronized with the application's entity models across different environments.
+
+-----------------------------------------------------------------------
+
+# Question 7:
+
+What does SaveChanges() do?
+
+# Answer:
+
+SaveChanges() commits all tracked changes made through the DbContext to the database. 
+
+Entity Framework Core tracks entities that have been added, modified, or deleted, generates the appropriate SQL statements, 
+and executes them within a transaction to ensure the changes are applied atomically.
+
+-----------------------------------------------------------------------
+
+# Question 8:
+
+Why AddDbContext() and not AddScoped()?
+
+# Answer:
+
+AddDbContext() actually registers the ApplicationDbContext as a Scoped service behind the scenes, but it also configures EF Core with the database provider (SQL Server), 
+connection string, and other EF-specific options.
+
+So although a DbContext has a scoped lifetime, we don't register it manually with AddScoped(). We let EF Core do it correctly.
+
+-----------------------------------------------------------------------

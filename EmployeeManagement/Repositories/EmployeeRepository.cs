@@ -1,48 +1,39 @@
-﻿using EmployeeManagement.Exceptions;
+﻿using EmployeeManagement.Data;
+using EmployeeManagement.Exceptions;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly List<Employee> _employees =
-        [
-            new Employee
-            {
-                Id = 1,
-                Name = "John",
-                Age = 30,
-                Salary = 40000
-            },
+        private readonly ApplicationDbContext _context;
 
-            new Employee
-            {
-                Id = 2,
-                Name = "Alice",
-                Age = 27,
-                Salary = 50000
-            }
-        ];
+        public EmployeeRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         public List<Employee> GetAll()
         {
-            return _employees;
+            return _context.Employees.ToList();
         }
 
         public Employee? GetById(int id)
         {
-            return _employees.FirstOrDefault(e => e.Id == id);
+            return _context.Employees.Find(id);
         }
 
         public void Add(Employee employee)
         {
-            _employees.Add(employee);
+            _context.Employees.Add(employee);
+            _context.SaveChanges();
         }
 
         public void Update(int id, Employee employee)
         {
-            var existingEmployee = GetById(id);
+            var existingEmployee = _context.Employees.Find(id);
 
             if (existingEmployee == null)
                 throw new EmployeeNotFoundException(id);
@@ -50,16 +41,19 @@ namespace EmployeeManagement.Repositories
             existingEmployee.Name = employee.Name;
             existingEmployee.Age = employee.Age;
             existingEmployee.Salary = employee.Salary;
+
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            var existingEmployee = GetById(id);
+            var existingEmployee = _context.Employees.Find(id);
 
             if (existingEmployee == null)
                 throw new EmployeeNotFoundException(id);
 
-            _employees.Remove(existingEmployee);
+            _context.Employees.Remove(existingEmployee);
+            _context.SaveChanges();
         }
     }
 }

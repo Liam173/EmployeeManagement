@@ -118,3 +118,16 @@ This provides a logging category, making it much easier to filter, search, and t
 It also avoids manually specifying class names in every log message and keeps logging consistent across the application.
 
 -----------------------------------------------------------------------
+
+# Question 10:
+
+Why should we use placeholders instead of string interpolation with ILogger?
+
+# Answer:
+
+Using placeholders enables structured logging. Instead of logging only a formatted string, the logger captures named properties like EmployeeId, 
+allowing log aggregation tools to filter, search, and analyze logs by those values. 
+
+It produces richer, more queryable logs while still generating the same readable message.
+
+-----------------------------------------------------------------------

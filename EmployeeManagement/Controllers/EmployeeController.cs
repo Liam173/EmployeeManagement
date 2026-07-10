@@ -17,19 +17,21 @@ namespace EmployeeManagement.Controllers
             _service = service;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllEmployees")]
+        [ProducesResponseType<List<EmployeeDto>>(StatusCodes.Status200OK)]
         public IActionResult GetAll()
         {
             return Ok(_service.GetAllEmployees());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetEmployee/{id}")]
+        [ProducesResponseType<EmployeeDto>(StatusCodes.Status200OK)]
         public IActionResult GetEmployeeById(int id)
         {
             return Ok(_service.GetEmployeeById(id));
         }
 
-        [HttpPost]
+        [HttpPost("CreateEmployee")]
         public IActionResult CreateEmployee(CreateEmployeeDto dto)
         {
             _service.AddEmployee(dto);
@@ -37,7 +39,7 @@ namespace EmployeeManagement.Controllers
             return Created();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateEmployee/{id}")]
         public IActionResult UpdateEmployee(int id, UpdateEmployeeDto dto)
         {
             _service.UpdateEmployee(id, dto);
@@ -45,7 +47,7 @@ namespace EmployeeManagement.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteEmployee/{id}")]
         public IActionResult DeleteEmployee(int id)
         {
             _service.DeleteEmployee(id);

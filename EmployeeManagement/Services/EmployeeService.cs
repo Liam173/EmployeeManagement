@@ -26,7 +26,7 @@ namespace EmployeeManagement.Services
             return _mapper.Map<List<EmployeeDto>>(employees);
         }
 
-        public EmployeeDto? GetEmployeeById(int id)
+        public EmployeeDto GetEmployeeById(int id)
         {
             var employee = _repository.GetById(id);
 

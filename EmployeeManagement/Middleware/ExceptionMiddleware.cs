@@ -12,7 +12,7 @@ namespace EmployeeManagement.Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -22,18 +22,15 @@ namespace EmployeeManagement.Middleware
             {
                 context.Response.ContentType = "application/json";
 
-                if (ex is EmployeeNotFoundException)
+                context.Response.StatusCode = ex switch
                 {
-                    context.Response.StatusCode = StatusCodes.Status404NotFound;
-                }
-                else
-                {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                }
+                    EmployeeNotFoundException => StatusCodes.Status404NotFound,
+                    _ => StatusCodes.Status500InternalServerError
+                };
 
                 var response = new
                 {
-                    StatusCodes = context.Response.StatusCode,
+                    status = context.Response.StatusCode,
                     error = ex.Message
                 };
 

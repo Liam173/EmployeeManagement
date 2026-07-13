@@ -1,14 +1,17 @@
+using EmployeeManagement.Data;
 using EmployeeManagement.Interfaces;
+using EmployeeManagement.Middleware;
 using EmployeeManagement.Profiles;
 using EmployeeManagement.Repositories;
 using EmployeeManagement.Services;
+using EmployeeManagement.Settings;
 using EmployeeManagement.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using EmployeeManagement.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using EmployeeManagement.Middleware;
-using EmployeeManagement.Settings;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +21,6 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddOpenApi();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddAutoMapper(typeof(EmployeeProfile));
@@ -30,6 +32,30 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<EmailService>();
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var jwtSettings = builder.Configuration
+            .GetSection("JwtSettings")
+            .Get<JwtSettings>();
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtSettings!.Issuer,
+            ValidAudience = jwtSettings.Audience,
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings.Key))
+        };
+    });
+builder.Services.AddScoped<AuthenticationService>();
 
 var app = builder.Build();
 
@@ -43,6 +69,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

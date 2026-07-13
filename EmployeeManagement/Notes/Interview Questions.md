@@ -143,3 +143,15 @@ IOptions<T> binds a specific configuration section to a strongly typed class, ma
 It also limits a class to only the configuration it needs, instead of giving it access to the entire application configuration through IConfiguration.
 
 -----------------------------------------------------------------------
+
+# Question 12:
+
+Why return a DTO instead of a primitive type?
+
+# Answer:
+
+A DTO provides a stable API contract that can be extended without changing the endpoint's return type. 
+
+It also makes the response self-describing and allows additional metadata to be included in the future.
+
+-----------------------------------------------------------------------

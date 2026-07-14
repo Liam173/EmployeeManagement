@@ -60,6 +60,7 @@ builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddSingleton<InstanceIdService>();
 builder.Services.AddHostedService<EmailBackgroundService>();
 builder.Services.AddSingleton<FakeEmailQueueService>();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

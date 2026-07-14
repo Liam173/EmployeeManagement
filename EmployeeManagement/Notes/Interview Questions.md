@@ -170,3 +170,44 @@ while keeping requests isolated from one another.
 Using a singleton would cause thread-safety and state-sharing issues, and using a transient lifetime would break change tracking across operations.
 
 -----------------------------------------------------------------------
+
+# Question 14:
+
+Why do we remove the cache instead of immediately updating it?
+
+# Answer:
+
+Removing the cache keeps the cache simple and avoids maintaining duplicate state. 
+
+The next request repopulates the cache with the latest data from the database, 
+ensuring the cache reflects the source of truth while avoiding unnecessary work if the data is never requested again.
+
+-----------------------------------------------------------------------
+
+# Question 15:
+
+Should everything be cached?
+
+# Answer:
+
+No. I would cache data that's expensive to retrieve, requested frequently, and doesn't change often. 
+
+I wouldn't cache highly dynamic data like timestamps or random values because the cache would quickly become stale or defeat the purpose of the endpoint.
+
+-----------------------------------------------------------------------
+
+# Question 16:
+
+What is the Cache-Aside Pattern?
+
+# Answer:
+
+The Cache-Aside Pattern is a caching strategy where the application first checks the cache.
+
+If the requested data exists, it is returned directly.
+
+If it does not exist, the application retrieves the data from the database, stores it in the cache, and then returns it.
+
+When data is updated or deleted, the relevant cache entry is removed so that the next request reloads fresh data from the database.
+
+-----------------------------------------------------------------------

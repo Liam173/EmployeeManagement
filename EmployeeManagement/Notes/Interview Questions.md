@@ -155,3 +155,18 @@ A DTO provides a stable API contract that can be extended without changing the e
 It also makes the response self-describing and allows additional metadata to be included in the future.
 
 -----------------------------------------------------------------------
+
+# Question 13:
+
+Why is DbContext registered as Scoped?
+
+# Answer:
+
+DbContext represents a unit of work for a single HTTP request.
+
+A scoped lifetime ensures that all repositories and services participating in that request share the same context for change tracking and transactions, 
+while keeping requests isolated from one another.
+
+Using a singleton would cause thread-safety and state-sharing issues, and using a transient lifetime would break change tracking across operations.
+
+-----------------------------------------------------------------------

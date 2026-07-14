@@ -1,3 +1,4 @@
+using EmployeeManagement.BackgroundServices;
 using EmployeeManagement.Data;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Middleware;
@@ -57,6 +58,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddSingleton<InstanceIdService>();
+builder.Services.AddHostedService<EmailBackgroundService>();
+builder.Services.AddSingleton<FakeEmailQueueService>();
 
 var app = builder.Build();
 

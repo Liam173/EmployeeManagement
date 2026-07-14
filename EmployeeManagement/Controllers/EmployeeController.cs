@@ -13,10 +13,17 @@ namespace EmployeeManagement.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly EmployeeService _service;
+        private readonly InstanceIdService _instance1;
+        private readonly InstanceIdService _instance2;
 
-        public EmployeeController(EmployeeService service)
+        public EmployeeController(
+            EmployeeService service, 
+            InstanceIdService instance1,
+            InstanceIdService instance2)
         {
             _service = service;
+            _instance1 = instance1;
+            _instance2 = instance2;
         }
 
         [HttpGet("GetAllEmployees")]
@@ -55,6 +62,17 @@ namespace EmployeeManagement.Controllers
             _service.DeleteEmployee(id);
 
             return NoContent();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("InstanceId")]
+        public IActionResult GetInstanceId()
+        {
+            return Ok(new
+            {
+                First = _instance1.InstanceId,
+                Second = _instance2.InstanceId
+            });
         }
     }
 }

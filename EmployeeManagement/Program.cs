@@ -56,6 +56,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddSingleton<InstanceIdService>();
 
 var app = builder.Build();
 

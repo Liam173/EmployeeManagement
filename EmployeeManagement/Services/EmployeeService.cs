@@ -3,6 +3,7 @@ using EmployeeManagement.DTOs;
 using EmployeeManagement.Exceptions;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EmployeeManagement.Services
 {
@@ -11,15 +12,27 @@ namespace EmployeeManagement.Services
         private readonly IEmployeeRepository _repository;
         private readonly IMapper _mapper;
         private readonly ILogger<EmployeeService> _logger;
+        private readonly IMemoryCache _cache;
+        public static class CacheKeys
+        {
+            public const string AllEmployees = "Employees_All";
+
+            public static string Employee(int id)
+            {
+                return $"Employee_{id}";
+            }
+        }
 
         public EmployeeService(
             IEmployeeRepository repository,
             IMapper mapper,
-            ILogger<EmployeeService> logger)
+            ILogger<EmployeeService> logger,
+            IMemoryCache cache)
         {
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
+            _cache = cache;
         }
 
         public List<EmployeeDto> GetAllEmployees()
@@ -27,9 +40,25 @@ namespace EmployeeManagement.Services
             _logger.LogInformation(
                 "Retrieving all employees.");
 
+            if (_cache.TryGetValue(CacheKeys.AllEmployees, out List<EmployeeDto>? cachedEmployees))
+            {
+                _logger.LogInformation("Returned all employees from cache.");
+
+                return cachedEmployees!;
+            }
+
             var employees = _repository.GetAll();
 
-            return _mapper.Map<List<EmployeeDto>>(employees);
+            var employeeDtos = _mapper.Map<List<EmployeeDto>>(employees);
+
+            _cache.Set(
+                CacheKeys.AllEmployees,
+                employeeDtos,
+                TimeSpan.FromMinutes(5));
+
+            _logger.LogInformation("Stored all employees in cache.");
+
+            return employeeDtos;
         }
 
         public EmployeeDto GetEmployeeById(int id)
@@ -37,6 +66,17 @@ namespace EmployeeManagement.Services
             _logger.LogInformation(
                 "Retrieving employee {EmployeeId}.",
                 id);
+
+            var cacheKey = CacheKeys.Employee(id);
+
+            if (_cache.TryGetValue(cacheKey, out EmployeeDto? cachedEmployee))
+            {
+                _logger.LogInformation(
+                    "Employee {EmployeeId} returned from cache.",
+                    id);
+
+                return cachedEmployee!;
+            }
 
             var employee = _repository.GetById(id);
 
@@ -49,7 +89,18 @@ namespace EmployeeManagement.Services
                 throw new EmployeeNotFoundException(id);
             }
 
-            return _mapper.Map<EmployeeDto>(employee);
+            var dto = _mapper.Map<EmployeeDto>(employee);
+
+            _cache.Set(
+                cacheKey,
+                dto,
+                TimeSpan.FromMinutes(5));
+
+            _logger.LogInformation(
+                "Employee {EmployeeId} stored in cache.",
+                id);
+
+            return dto;
         }
 
         public void AddEmployee(CreateEmployeeDto dto) 
@@ -61,6 +112,11 @@ namespace EmployeeManagement.Services
 
             _logger.LogInformation(
                 "Employee was added successfully.");
+
+            _cache.Remove(CacheKeys.AllEmployees);
+
+            _logger.LogInformation(
+                "Employee cache removed.");
         }
 
         public void UpdateEmployee(int id, UpdateEmployeeDto dto) 
@@ -89,6 +145,13 @@ namespace EmployeeManagement.Services
             _logger.LogInformation(
                 "Employee {EmployeeId} was updated successfully.",
                 id);
+
+            _cache.Remove(CacheKeys.Employee(id));
+            _cache.Remove(CacheKeys.AllEmployees);
+
+            _logger.LogInformation(
+                "Employee {EmployeeId} cache removed.",
+                id);
         }
 
         public void DeleteEmployee(int id)
@@ -112,6 +175,13 @@ namespace EmployeeManagement.Services
 
             _logger.LogInformation(
                 "Employee {EmployeeId} deleted successfully.",
+                id);
+
+            _cache.Remove(CacheKeys.Employee(id));
+            _cache.Remove(CacheKeys.AllEmployees);
+
+            _logger.LogInformation(
+                "Employee {EmployeeId} cache removed.",
                 id);
         }
     }

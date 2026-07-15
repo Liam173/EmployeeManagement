@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using EmployeeManagement.BackgroundServices;
 using EmployeeManagement.Data;
 using EmployeeManagement.EventHandlers;
@@ -15,6 +16,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using EmployeeManagement.Swagger;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +73,22 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IEventHandler<EmployeeCreatedEvent>,
     EmployeeCreatedAuditHandler>();
+builder.Services
+    .AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+
+        options.AssumeDefaultVersionWhenUnspecified = true;
+
+        options.ReportApiVersions = true;
+    })
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+
+        options.SubstituteApiVersionInUrl = true;
+    });
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 var app = builder.Build();
 

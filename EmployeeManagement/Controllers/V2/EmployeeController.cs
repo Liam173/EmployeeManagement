@@ -1,15 +1,17 @@
-﻿using EmployeeManagement.DTOs;
-using EmployeeManagement.Exceptions;
-using EmployeeManagement.Models;
+﻿using Asp.Versioning;
+using EmployeeManagement.DTOs;
+using EmployeeManagement.DTOs.V2;
 using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EmployeeManagement.Controllers
+namespace EmployeeManagement.Controllers.V2
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]")]
+    [ApiVersion("2.0")]
+    [ApiExplorerSettings(GroupName = "v2")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class EmployeeController : ControllerBase
     {
         private readonly EmployeeService _service;
@@ -41,9 +43,16 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost("CreateEmployee")]
-        public async Task<IActionResult> CreateEmployee(CreateEmployeeDto dto)
+        public async Task<IActionResult> CreateEmployee(CreateEmployeeV2Dto dto)
         {
-            await _service.AddEmployee(dto);
+            var createDto = new CreateEmployeeDto
+            {
+                Name = dto.Name,
+                Age = dto.Age,
+                Salary = dto.Salary
+            };
+
+            await _service.AddEmployee(createDto);
 
             return Created();
         }

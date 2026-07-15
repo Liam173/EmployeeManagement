@@ -225,3 +225,33 @@ Instead of calling services directly, components communicate through abstraction
 This makes the system easier to extend, test, and maintain because new functionality can be added without modifying existing code.
 
 -----------------------------------------------------------------------
+
+# Question 18:
+
+What's the difference between backward compatibility and forward compatibility?
+
+# Answer:
+
+New API versions don't break existing clients. 
+Ex. v1 client -> v2 API
+
+Older APIs can tolerate requests or data from newer clients. 
+Ex. v2 client -> v1 API
+This is harder to achieve and isn't always possible, but designing requests to ignore unknown fields can help.
+
+-----------------------------------------------------------------------
+
+# Question 19:
+
+Why do we version APIs instead of just changing the existing endpoints?
+
+# Answer:
+
+Because an API is a contract with its consumers. 
+
+Breaking that contract can cause production failures in client applications. 
+
+Versioning allows us to introduce new functionality and evolve the API while maintaining backward compatibility for existing consumers until they 
+have time to migrate.
+
+-----------------------------------------------------------------------

@@ -41,9 +41,9 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost("CreateEmployee")]
-        public IActionResult CreateEmployee(CreateEmployeeDto dto)
+        public async Task<IActionResult> CreateEmployee(CreateEmployeeDto dto)
         {
-            _service.AddEmployee(dto);
+            await _service.AddEmployee(dto);
 
             return Created();
         }

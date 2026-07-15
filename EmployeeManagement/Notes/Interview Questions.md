@@ -211,3 +211,17 @@ If it does not exist, the application retrieves the data from the database, stor
 When data is updated or deleted, the relevant cache entry is removed so that the next request reloads fresh data from the database.
 
 -----------------------------------------------------------------------
+
+# Question 17:
+
+What is loose coupling?
+
+# Answer:
+
+Loose coupling means one component has little or no knowledge of the implementation details of another component. 
+
+Instead of calling services directly, components communicate through abstractions such as interfaces or events. 
+
+This makes the system easier to extend, test, and maintain because new functionality can be added without modifying existing code.
+
+-----------------------------------------------------------------------

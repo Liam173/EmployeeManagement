@@ -1,5 +1,7 @@
 using EmployeeManagement.BackgroundServices;
 using EmployeeManagement.Data;
+using EmployeeManagement.EventHandlers;
+using EmployeeManagement.Events;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Middleware;
 using EmployeeManagement.Profiles;
@@ -61,6 +63,13 @@ builder.Services.AddSingleton<InstanceIdService>();
 builder.Services.AddHostedService<EmailBackgroundService>();
 builder.Services.AddSingleton<FakeEmailQueueService>();
 builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IEventPublisher, EventPublisher>();
+builder.Services.AddScoped<
+    IEventHandler<EmployeeCreatedEvent>,
+    EmployeeCreatedEmailHandler>();
+builder.Services.AddScoped<
+    IEventHandler<EmployeeCreatedEvent>,
+    EmployeeCreatedAuditHandler>();
 
 var app = builder.Build();
 

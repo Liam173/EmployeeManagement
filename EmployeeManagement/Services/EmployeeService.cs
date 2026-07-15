@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EmployeeManagement.DTOs;
+using EmployeeManagement.Events;
 using EmployeeManagement.Exceptions;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
@@ -13,6 +14,8 @@ namespace EmployeeManagement.Services
         private readonly IMapper _mapper;
         private readonly ILogger<EmployeeService> _logger;
         private readonly IMemoryCache _cache;
+        private readonly IEventPublisher _eventPublisher;
+
         public static class CacheKeys
         {
             public const string AllEmployees = "Employees_All";
@@ -27,12 +30,14 @@ namespace EmployeeManagement.Services
             IEmployeeRepository repository,
             IMapper mapper,
             ILogger<EmployeeService> logger,
-            IMemoryCache cache)
+            IMemoryCache cache,
+            IEventPublisher eventPublisher)
         {
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
             _cache = cache;
+            _eventPublisher = eventPublisher;
         }
 
         public List<EmployeeDto> GetAllEmployees()
@@ -103,12 +108,19 @@ namespace EmployeeManagement.Services
             return dto;
         }
 
-        public void AddEmployee(CreateEmployeeDto dto) 
+        public async Task AddEmployee(CreateEmployeeDto dto) 
         {
             _logger.LogInformation(
                 "Creating new employee.");
 
-            _repository.Add(_mapper.Map<Employee>(dto));
+            var employee = _mapper.Map<Employee>(dto);
+
+            _repository.Add(employee);
+
+            await _eventPublisher.PublishAsync(
+                new EmployeeCreatedEvent(
+                    employee.Id,
+                    employee.Name));
 
             _logger.LogInformation(
                 "Employee was added successfully.");

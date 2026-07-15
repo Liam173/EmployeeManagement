@@ -117,11 +117,6 @@ namespace EmployeeManagement.Services
 
             _repository.Add(employee);
 
-            await _eventPublisher.PublishAsync(
-                new EmployeeCreatedEvent(
-                    employee.Id,
-                    employee.Name));
-
             _logger.LogInformation(
                 "Employee was added successfully.");
 
@@ -129,6 +124,11 @@ namespace EmployeeManagement.Services
 
             _logger.LogInformation(
                 "Employee cache removed.");
+
+            await _eventPublisher.PublishAsync(
+                new EmployeeCreatedEvent(
+                    employee.Id,
+                    employee.Name));
         }
 
         public void UpdateEmployee(int id, UpdateEmployeeDto dto) 

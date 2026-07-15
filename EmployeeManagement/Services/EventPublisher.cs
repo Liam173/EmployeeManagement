@@ -1,6 +1,6 @@
 ﻿using EmployeeManagement.Interfaces;
 
-namespace EmployeeManagement.Events
+namespace EmployeeManagement.Services
 {
     public class EventPublisher : IEventPublisher
     {
@@ -23,6 +23,10 @@ namespace EmployeeManagement.Events
             {
                 try
                 {
+                    _logger.LogInformation(
+                        "Executing {Handler}.",
+                        handler.GetType().Name);
+
                     await handler.HandleAsync(@event);
 
                     _logger.LogInformation(

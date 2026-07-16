@@ -62,7 +62,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddSingleton<InstanceIdService>();
+builder.Services.AddSingleton<IInstanceIdService, InstanceIdService>();
 builder.Services.AddHostedService<EmailBackgroundService>();
 builder.Services.AddSingleton<FakeEmailQueueService>();
 builder.Services.AddMemoryCache();

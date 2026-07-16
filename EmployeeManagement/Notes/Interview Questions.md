@@ -255,3 +255,31 @@ Versioning allows us to introduce new functionality and evolve the API while mai
 have time to migrate.
 
 -----------------------------------------------------------------------
+
+# Question 20:
+
+Why do we need integration tests if we already have unit tests?
+
+# Answer:
+
+Unit tests verify that individual classes behave correctly in isolation. 
+
+Integration tests verify that the application's components work together correctly, including routing, middleware, dependency injection, authentication, 
+serialization, and other framework features that unit tests don't exercise.
+
+-----------------------------------------------------------------------
+
+# Question 21:
+
+What makes a good automated test?
+
+# Answer:
+
+- Independent (doesn't rely on other tests)
+- Repeatable (same result every time)
+- Fast
+- Easy to understand
+- Self-contained (arranges its own data)
+- Tests one behavior
+
+-----------------------------------------------------------------------

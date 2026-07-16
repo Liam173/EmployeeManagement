@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using EmployeeManagement.DTOs;
+using EmployeeManagement.Interfaces;
 using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +15,13 @@ namespace EmployeeManagement.Controllers.V1
     public class EmployeeController : ControllerBase
     {
         private readonly EmployeeService _service;
-        private readonly InstanceIdService _instance1;
-        private readonly InstanceIdService _instance2;
+        private readonly IInstanceIdService _instance1;
+        private readonly IInstanceIdService _instance2;
 
         public EmployeeController(
             EmployeeService service, 
-            InstanceIdService instance1,
-            InstanceIdService instance2)
+            IInstanceIdService instance1,
+            IInstanceIdService instance2)
         {
             _service = service;
             _instance1 = instance1;

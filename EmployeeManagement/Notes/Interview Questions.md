@@ -296,3 +296,30 @@ and puts additional load on the failing service.
 A circuit breaker fails fast, protects both systems, and periodically checks whether the dependency has recovered before allowing normal traffic again.
 
 -----------------------------------------------------------------------
+
+# Question 23:
+
+If anyone can decode a JWT, why is it still considered secure?
+
+# Answer:
+
+A JWT is secure because, although its contents can be decoded by anyone, it is digitally signed using a secret key known only to the server. 
+
+If someone modifies the payload—for example, changing their role from 'Employee' to 'Admin'—the signature becomes invalid. 
+
+When the API recalculates the signature using its secret key, it no longer matches the one in the token, so the request is rejected.
+
+-----------------------------------------------------------------------
+
+# Question 24:
+
+Why not just put the entire User object inside the JWT?
+
+# Answer:
+
+JWTs are sent with every authenticated request, so they should remain as small as possible and only contain claims that are frequently needed for 
+authentication or authorization. 
+
+Large or sensitive data should remain in the database.
+
+-----------------------------------------------------------------------

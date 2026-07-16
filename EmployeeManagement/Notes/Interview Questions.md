@@ -283,3 +283,16 @@ What makes a good automated test?
 - Tests one behavior
 
 -----------------------------------------------------------------------
+
+# Question 22:
+
+Why not just keep retrying forever instead of using a circuit breaker?
+
+# Answer:
+
+Because once we've established that a dependency is unhealthy, continuing to send requests wastes resources, increases latency for our users, 
+and puts additional load on the failing service. 
+
+A circuit breaker fails fast, protects both systems, and periodically checks whether the dependency has recovered before allowing normal traffic again.
+
+-----------------------------------------------------------------------

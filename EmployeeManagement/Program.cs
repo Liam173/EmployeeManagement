@@ -89,6 +89,22 @@ builder.Services
         options.SubstituteApiVersionInUrl = true;
     });
 builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+builder.Services
+    .AddHttpClient<PayrollClient>(client =>
+    {
+        client.BaseAddress =
+            new Uri("https://payroll-api.company.com");
+    })
+    .AddStandardResilienceHandler(options =>
+    {
+        options.TotalRequestTimeout.Timeout =
+            TimeSpan.FromSeconds(8);
+
+        options.AttemptTimeout.Timeout =
+            TimeSpan.FromSeconds(2);
+
+        options.Retry.MaxRetryAttempts = 3;
+    });
 
 var app = builder.Build();
 

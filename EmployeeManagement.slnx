@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
   <Project Path="EmployeeManagement.Tests/EmployeeManagement.Tests.csproj" Id="f6890f4d-18ef-489b-b8d8-cd2961502ab8">
     <Build Solution="Debug|*" Project="false" />
   </Project>

@@ -323,3 +323,82 @@ authentication or authorization.
 Large or sensitive data should remain in the database.
 
 -----------------------------------------------------------------------
+
+# Question 25:
+
+What problem does caching solve?
+
+# Answer:
+
+Caching reduces repeated access to expensive resources, such as databases or external services, 
+by storing frequently requested data in memory or another fast storage layer. 
+
+This improves response times, reduces system load, and increases application scalability.
+
+-----------------------------------------------------------------------
+
+# Question 26:
+
+Should we cache every endpoint?
+
+# Answer:
+
+No. Caching should be driven by the read-to-write ratio, the cost of retrieving the data, how frequently it changes, 
+and whether the application can tolerate temporarily stale data.
+
+-----------------------------------------------------------------------
+
+# Question 27:
+
+When should you invalidate a cache?
+
+# Answer:
+
+Whenever the underlying data changes. The cache should no longer be trusted once the source of truth has been updated.
+
+-----------------------------------------------------------------------
+
+# Question 28:
+
+Cache removed, then suddenly 500 users call the GET endpoint at the exact same time. What problem might this cause?
+
+# Answer:
+
+When many requests encounter an empty cache at the same time, they can all query the database simultaneously. 
+
+This is known as a cache stampede. To prevent it, we can coordinate cache population using a lock or semaphore so that only one request rebuilds the cache while 
+the others wait and then read the populated value.
+
+-----------------------------------------------------------------------
+# Question 29:
+
+Why don't we cache everything?
+
+# Answer:
+
+Because caching introduces stale data, memory usage, invalidation complexity, and synchronization challenges. 
+
+Whether data should be cached depends on how frequently it changes, how expensive it is to retrieve, and whether the business can tolerate temporarily stale information.
+
+-----------------------------------------------------------------------
+
+# Question 30:
+
+When would you use absolute expiration?
+
+# Answer:
+
+When data has a predictable lifetime or when cache invalidation events aren't guaranteed. Absolute expiration ensures stale data is eventually removed, 
+even if no explicit invalidation occurs.
+
+-----------------------------------------------------------------------
+
+# Question 31:
+
+When would you use sliding expiration?
+
+# Answer:
+
+When frequently accessed data should remain in memory while inactive data naturally expires, helping manage memory usage.
+
+-----------------------------------------------------------------------

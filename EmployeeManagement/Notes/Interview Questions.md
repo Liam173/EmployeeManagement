@@ -402,3 +402,73 @@ When would you use sliding expiration?
 When frequently accessed data should remain in memory while inactive data naturally expires, helping manage memory usage.
 
 -----------------------------------------------------------------------
+
+# Question 32:
+
+Why use a message queue instead of making HTTP calls directly?
+
+# Answer:
+
+A message queue decouples the producer from downstream services. The API can complete its primary responsibility and return immediately, 
+while secondary operations such as notifications, payroll, or auditing are processed asynchronously. This improves responsiveness, resilience, and scalability.
+
+-----------------------------------------------------------------------
+
+# Question 33:
+
+Why are queues more resilient than direct HTTP calls?
+
+# Answer:
+
+Queues decouple systems. If a downstream service is temporarily unavailable, the message can remain in the queue and be processed later instead of 
+causing the original request to fail.
+
+-----------------------------------------------------------------------
+
+# Question 34:
+
+Why must consumers be idempotent?
+
+# Answer:
+
+Because message brokers generally provide at-least-once delivery. A consumer may receive the same message multiple times, 
+so processing it repeatedly must not produce duplicate or inconsistent results.
+
+-----------------------------------------------------------------------
+
+# Question 35:
+
+Why isn't checking the database enough?
+
+# Answer:
+
+Because of race conditions. Two consumers could both check before either inserts the record. 
+
+A database unique constraint ensures only one insert can succeed, making the operation truly safe.
+
+-----------------------------------------------------------------------
+
+# Question 35:
+
+Why are event-driven systems easy to extend?
+
+# Answer:
+
+Because publishers are decoupled from consumers. The publisher only emits an event and doesn't know who processes it. 
+
+New consumers can subscribe to the event without modifying the publishing service, making the architecture open for extension but closed for modification.
+
+-----------------------------------------------------------------------
+
+# Question 36:
+
+Why use a Dead Letter Queue?
+
+# Answer:
+
+A Dead Letter Queue stores messages that couldn't be processed successfully after the configured retry policy. 
+
+This prevents poison messages from blocking the main queue while allowing failed messages to be investigated and replayed later.
+
+-----------------------------------------------------------------------
+

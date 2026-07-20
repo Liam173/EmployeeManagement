@@ -448,7 +448,7 @@ A database unique constraint ensures only one insert can succeed, making the ope
 
 -----------------------------------------------------------------------
 
-# Question 35:
+# Question 36:
 
 Why are event-driven systems easy to extend?
 
@@ -460,7 +460,7 @@ New consumers can subscribe to the event without modifying the publishing servic
 
 -----------------------------------------------------------------------
 
-# Question 36:
+# Question 37:
 
 Why use a Dead Letter Queue?
 

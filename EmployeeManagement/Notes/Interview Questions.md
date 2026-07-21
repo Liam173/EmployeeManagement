@@ -472,3 +472,46 @@ This prevents poison messages from blocking the main queue while allowing failed
 
 -----------------------------------------------------------------------
 
+# Question 38:
+
+How do you decide what to verify in unit tests?
+
+# Answer:
+
+I verify interactions that represent part of the business behaviour of the method. 
+
+If removing a dependency call would introduce a bug while still allowing the method to compile and run, I want my unit tests to catch that.
+
+-----------------------------------------------------------------------
+
+# Question 39:
+
+What is the difference between a Unit Test and an Integration Test?
+
+# Answer:
+
+Unit tests verify a single unit of behaviour in isolation by mocking external dependencies such as repositories, event publishers, or external services. 
+
+Their goal is to test the business logic of a component without being affected by the database or other parts of the system. They are fast, deterministic, 
+and ideal for testing individual methods.
+
+Integration tests verify that multiple components work together correctly. 
+
+They exercise the real application pipeline—including controllers, dependency injection, middleware, validation, AutoMapper, repositories, 
+and the database—with little or no mocking. Although they are slower, they provide confidence that the application functions correctly as a whole.
+
+-----------------------------------------------------------------------
+
+# Question 40:
+
+Why don't you verify repository calls in an integration test?
+
+# Answer:
+
+Because integration tests verify the behaviour of the application as a whole rather than the interactions between individual components. 
+
+The repository is a real implementation, so instead of verifying that Add() was called, I verify the observable outcome—for example, 
+that the API returns a 201 Created response and that the employee actually exists in the database.
+
+-----------------------------------------------------------------------
+

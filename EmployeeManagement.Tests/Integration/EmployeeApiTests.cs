@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using EmployeeManagement.DTOs;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace EmployeeManagement.Tests.Integration;
@@ -48,5 +50,30 @@ public class EmployeeApiTests
         Assert.Equal(
             Guid.Parse("11111111-1111-1111-1111-111111111111"),
             result.Second);
+    }
+
+    [Fact]
+    public async Task PostEmployee_ShouldReturnCreated_WhenEmployeeIsValid()
+    {
+        // TODO: Implement Fake Authentication.
+
+        // Arrange
+
+        var request = new CreateEmployeeDto
+        {
+            Name = "Liam",
+            Age = 28,
+            Salary = 50000
+        };
+
+        // Act
+
+        var response = await _client.PostAsJsonAsync(
+            "/api/v1/Employee/CreateEmployee",
+            request);
+
+        // Assert
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 }

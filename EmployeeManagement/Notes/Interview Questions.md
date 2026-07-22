@@ -515,3 +515,15 @@ that the API returns a 201 Created response and that the employee actually exist
 
 -----------------------------------------------------------------------
 
+# Question 41:
+
+Why don't you verify repository calls in integration tests?
+
+# Answer:
+
+Because integration tests verify application behaviour rather than implementation details. 
+
+I care that the employee exists in the database and the API returns the correct response, not whether the repository's Add() method was called.
+
+-----------------------------------------------------------------------
+

@@ -17,7 +17,7 @@ namespace EmployeeManagement.Repositories
 
         public List<Employee> GetAll()
         {
-            return _context.Employees.ToList();
+            return _context.Employees.AsNoTracking().ToList();
         }
 
         public Employee? GetById(int id)

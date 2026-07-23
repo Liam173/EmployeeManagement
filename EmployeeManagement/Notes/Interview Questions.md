@@ -527,3 +527,17 @@ I care that the employee exists in the database and the API returns the correct 
 
 -----------------------------------------------------------------------
 
+# Question 42:
+
+What's the difference between INNER JOIN and LEFT JOIN?
+
+# Answer:
+
+An INNER JOIN returns only rows that have matching values in both tables. 
+
+A LEFT JOIN returns every row from the left table and includes matching rows from the right table where they exist. If no match exists, 
+the columns from the right table are returned as NULL.
+
+-----------------------------------------------------------------------
+
+

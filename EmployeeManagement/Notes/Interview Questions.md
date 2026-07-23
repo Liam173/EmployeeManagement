@@ -540,4 +540,26 @@ the columns from the right table are returned as NULL.
 
 -----------------------------------------------------------------------
 
+# Question 43:
+
+When would you use AsNoTracking()?
+
+# Answer:
+
+I use AsNoTracking() for read-only queries where I don't intend to modify the returned entities. 
+
+It improves performance and reduces memory usage because Entity Framework doesn't have to track changes to those objects.
+
+-----------------------------------------------------------------------
+
+# Question 44:
+
+When does an IQueryable execute?
+
+# Answer:
+
+When it's enumerated or when a terminal operation such as ToList(), First(), Count(), Any(), or foreach forces execution.
+
+-----------------------------------------------------------------------
+
 

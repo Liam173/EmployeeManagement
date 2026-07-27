@@ -23,9 +23,11 @@ namespace EmployeeManagement.Repositories
                 .ToList();
         }
 
-        public Employee? GetById(int id)
+        public Employee? GetById(int id, int tenantId)
         {
-            return _context.Employees.Find(id);
+            return _context.Employees.FirstOrDefault(x =>
+                x.Id == id &&
+                x.TenantId == tenantId);
         }
 
         public void Add(Employee employee)

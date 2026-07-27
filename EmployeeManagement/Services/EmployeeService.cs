@@ -19,11 +19,12 @@ namespace EmployeeManagement.Services
 
         public static class CacheKeys
         {
-            public const string AllEmployees = "Employees_All";
+            public static string AllEmployees(int tenantId)
+                => $"AllEmployees_{tenantId}";
 
-            public static string Employee(int id)
+            public static string Employee(int id, int tenantId)
             {
-                return $"Employee_{id}";
+                return $"Tenant{tenantId}_Employee{id}";
             }
         }
 
@@ -48,7 +49,7 @@ namespace EmployeeManagement.Services
             _logger.LogInformation(
                 "Retrieving all employees.");
 
-            if (_cache.TryGetValue(CacheKeys.AllEmployees, out List<EmployeeDto>? cachedEmployees))
+            if (_cache.TryGetValue(CacheKeys.AllEmployees(_tenantProvider.TenantId), out List<EmployeeDto>? cachedEmployees))
             {
                 _logger.LogInformation("Returned all employees from cache.");
 
@@ -60,7 +61,7 @@ namespace EmployeeManagement.Services
             var employeeDtos = _mapper.Map<List<EmployeeDto>>(employees);
 
             _cache.Set(
-                CacheKeys.AllEmployees,
+                CacheKeys.AllEmployees(_tenantProvider.TenantId),
                 employeeDtos,
                 TimeSpan.FromMinutes(5));
 
@@ -75,7 +76,7 @@ namespace EmployeeManagement.Services
                 "Retrieving employee {EmployeeId}.",
                 id);
 
-            var cacheKey = CacheKeys.Employee(id);
+            var cacheKey = CacheKeys.Employee(id, _tenantProvider.TenantId);
 
             if (_cache.TryGetValue(cacheKey, out EmployeeDto? cachedEmployee))
             {
@@ -86,7 +87,7 @@ namespace EmployeeManagement.Services
                 return cachedEmployee!;
             }
 
-            var employee = _repository.GetById(id);
+            var employee = _repository.GetById(id, _tenantProvider.TenantId);
 
             if (employee == null)
             {
@@ -118,12 +119,14 @@ namespace EmployeeManagement.Services
 
             var employee = _mapper.Map<Employee>(dto);
 
+            employee.TenantId = _tenantProvider.TenantId;
+
             _repository.Add(employee);
 
             _logger.LogInformation(
                 "Employee was added successfully.");
 
-            _cache.Remove(CacheKeys.AllEmployees);
+            _cache.Remove(CacheKeys.AllEmployees(_tenantProvider.TenantId));
 
             _logger.LogInformation(
                 "Employee cache removed.");
@@ -140,7 +143,7 @@ namespace EmployeeManagement.Services
                 "Attempting to update employee {EmployeeId}.",
                 id);
 
-            var existingEmployee = _repository.GetById(id);
+            var existingEmployee = _repository.GetById(id, _tenantProvider.TenantId);
 
             if (existingEmployee == null)
             {
@@ -161,8 +164,8 @@ namespace EmployeeManagement.Services
                 "Employee {EmployeeId} was updated successfully.",
                 id);
 
-            _cache.Remove(CacheKeys.Employee(id));
-            _cache.Remove(CacheKeys.AllEmployees);
+            _cache.Remove(CacheKeys.Employee(id, _tenantProvider.TenantId));
+            _cache.Remove(CacheKeys.AllEmployees(_tenantProvider.TenantId));
 
             _logger.LogInformation(
                 "Employee {EmployeeId} cache removed.",
@@ -175,7 +178,7 @@ namespace EmployeeManagement.Services
                 "Attempting to delete employee {EmployeeId}.",
                 id);
 
-            var employee = _repository.GetById(id);
+            var employee = _repository.GetById(id, _tenantProvider.TenantId);
 
             if (employee == null)
             {
@@ -192,8 +195,8 @@ namespace EmployeeManagement.Services
                 "Employee {EmployeeId} deleted successfully.",
                 id);
 
-            _cache.Remove(CacheKeys.Employee(id));
-            _cache.Remove(CacheKeys.AllEmployees);
+            _cache.Remove(CacheKeys.Employee(id, _tenantProvider.TenantId));
+            _cache.Remove(CacheKeys.AllEmployees(_tenantProvider.TenantId));
 
             _logger.LogInformation(
                 "Employee {EmployeeId} cache removed.",

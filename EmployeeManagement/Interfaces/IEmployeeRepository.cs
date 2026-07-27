@@ -6,7 +6,7 @@ namespace EmployeeManagement.Interfaces
     {
         List<Employee> GetAll(int tenantId);
 
-        Employee? GetById(int id);
+        Employee? GetById(int id, int tenantId);
 
         void Add(Employee employee);
 

@@ -105,6 +105,7 @@ builder.Services
 
         options.Retry.MaxRetryAttempts = 3;
     });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
 var app = builder.Build();

@@ -40,7 +40,8 @@ namespace EmployeeManagement.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim("tenantId", user.TenantId.ToString())
             };
 
             // 4. Generate JWT

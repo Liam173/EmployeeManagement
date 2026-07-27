@@ -159,7 +159,7 @@ public class EmployeeServiceTests
         // Verify
 
         _repositoryMock.Verify(
-            x => x.GetAll(),
+            x => x.GetAll(5),
             Times.Never);
 
         _mapperMock.Verify(
@@ -175,8 +175,12 @@ public class EmployeeServiceTests
         var employee = CreateEmployee();
         var employeeDto = CreateEmployeeDto();
 
+        _tenantProviderMock
+            .Setup(x => x.TenantId)
+            .Returns(5);
+
         _repositoryMock
-            .Setup(x => x.GetById(1))
+            .Setup(x => x.GetById(1, 5))
             .Returns(employee);
 
         _mapperMock
@@ -190,7 +194,7 @@ public class EmployeeServiceTests
         // Assert
 
         var cached = _memoryCache.Get<EmployeeDto>(
-            EmployeeService.CacheKeys.Employee(1));
+            EmployeeService.CacheKeys.Employee(1, 5));
 
         Assert.NotNull(cached);
         Assert.Equal(employeeDto.Id, cached!.Id);
@@ -201,7 +205,7 @@ public class EmployeeServiceTests
 
         // Verify
 
-        _repositoryMock.Verify(x => x.GetById(1), Times.Once);
+        _repositoryMock.Verify(x => x.GetById(1, 5), Times.Once);
         _mapperMock.Verify(x => x.Map<EmployeeDto>(employee), Times.Once);
     }
 

@@ -15,14 +15,19 @@ namespace EmployeeManagement.Repositories
             _context = context;
         }
 
-        public List<Employee> GetAll()
+        public List<Employee> GetAll(int tenantId)
         {
-            return _context.Employees.AsNoTracking().ToList();
+            return _context.Employees
+                .AsNoTracking()
+                .Where(x => x.TenantId == tenantId)
+                .ToList();
         }
 
-        public Employee? GetById(int id)
+        public Employee? GetById(int id, int tenantId)
         {
-            return _context.Employees.Find(id);
+            return _context.Employees.FirstOrDefault(x =>
+                x.Id == id &&
+                x.TenantId == tenantId);
         }
 
         public void Add(Employee employee)

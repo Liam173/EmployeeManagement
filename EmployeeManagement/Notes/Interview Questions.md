@@ -562,4 +562,14 @@ When it's enumerated or when a terminal operation such as ToList(), First(), Cou
 
 -----------------------------------------------------------------------
 
+# Question 45:
+
+If all your service unit tests pass, can there still be a bug in the repository?
+
+# Answer:
+
+Yes. Because the repository is mocked in the service unit tests. Unit tests verify that the service calls the repository correctly, 
+but they do not verify that the repository implementation itself behaves correctly. That responsibility belongs to repository tests or integration tests.
+
+-----------------------------------------------------------------------
 

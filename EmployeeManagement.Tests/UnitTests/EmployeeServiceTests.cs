@@ -16,6 +16,7 @@ public class EmployeeServiceTests
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<ILogger<EmployeeService>> _loggerMock;
     private readonly Mock<IEventPublisher> _eventPublisherMock;
+    private readonly Mock<ITenantProvider> _tenantProviderMock;
 
     private readonly MemoryCache _memoryCache;
 
@@ -27,6 +28,7 @@ public class EmployeeServiceTests
         _mapperMock = new Mock<IMapper>();
         _loggerMock = new Mock<ILogger<EmployeeService>>();
         _eventPublisherMock = new Mock<IEventPublisher>();
+        _tenantProviderMock = new Mock<ITenantProvider>();
 
         _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
@@ -35,7 +37,8 @@ public class EmployeeServiceTests
             _mapperMock.Object,
             _loggerMock.Object,
             _memoryCache,
-            _eventPublisherMock.Object);
+            _eventPublisherMock.Object,
+            _tenantProviderMock.Object);
     }
 
     private List<Employee> CreateEmployeeList()
@@ -85,8 +88,12 @@ public class EmployeeServiceTests
         var employees = CreateEmployeeList();
         var employeeDtos = CreateEmployeeDtoList();
 
+        _tenantProviderMock
+            .Setup(x => x.TenantId)
+            .Returns(5);
+
         _repositoryMock
-            .Setup(x => x.GetAll())
+            .Setup(x => x.GetAll(5))
             .Returns(employees);
 
         _mapperMock
@@ -125,7 +132,7 @@ public class EmployeeServiceTests
 
         // Verify
 
-        _repositoryMock.Verify(x => x.GetAll(), Times.Once);
+        _repositoryMock.Verify(x => x.GetAll(5), Times.Once);
         _mapperMock.Verify(x => x.Map<List<EmployeeDto>>(employees), Times.Once);
     }
 

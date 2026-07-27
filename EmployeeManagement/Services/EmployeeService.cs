@@ -15,6 +15,7 @@ namespace EmployeeManagement.Services
         private readonly ILogger<EmployeeService> _logger;
         private readonly IMemoryCache _cache;
         private readonly IEventPublisher _eventPublisher;
+        private readonly ITenantProvider _tenantProvider;
 
         public static class CacheKeys
         {
@@ -31,13 +32,15 @@ namespace EmployeeManagement.Services
             IMapper mapper,
             ILogger<EmployeeService> logger,
             IMemoryCache cache,
-            IEventPublisher eventPublisher)
+            IEventPublisher eventPublisher,
+            ITenantProvider tenantProvider)
         {
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
             _cache = cache;
             _eventPublisher = eventPublisher;
+            _tenantProvider = tenantProvider;
         }
 
         public List<EmployeeDto> GetAllEmployees()
@@ -52,7 +55,7 @@ namespace EmployeeManagement.Services
                 return cachedEmployees!;
             }
 
-            var employees = _repository.GetAll();
+            var employees = _repository.GetAll(_tenantProvider.TenantId);
 
             var employeeDtos = _mapper.Map<List<EmployeeDto>>(employees);
 

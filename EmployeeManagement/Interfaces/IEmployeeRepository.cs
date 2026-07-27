@@ -4,7 +4,7 @@ namespace EmployeeManagement.Interfaces
 {
     public interface IEmployeeRepository
     {
-        List<Employee> GetAll();
+        List<Employee> GetAll(int tenantId);
 
         Employee? GetById(int id);
 

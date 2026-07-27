@@ -15,9 +15,12 @@ namespace EmployeeManagement.Repositories
             _context = context;
         }
 
-        public List<Employee> GetAll()
+        public List<Employee> GetAll(int tenantId)
         {
-            return _context.Employees.AsNoTracking().ToList();
+            return _context.Employees
+                .AsNoTracking()
+                .Where(x => x.TenantId == tenantId)
+                .ToList();
         }
 
         public Employee? GetById(int id)

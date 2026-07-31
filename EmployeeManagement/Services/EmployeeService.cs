@@ -112,7 +112,7 @@ namespace EmployeeManagement.Services
             return dto;
         }
 
-        public async Task AddEmployee(CreateEmployeeDto dto) 
+        public async Task AddEmployee(CreateEmployeeDto dto)
         {
             _logger.LogInformation(
                 "Creating new employee.");
@@ -137,7 +137,31 @@ namespace EmployeeManagement.Services
                     employee.Name));
         }
 
-        public void UpdateEmployee(int id, UpdateEmployeeDto dto) 
+        public async Task CreateEmployee(CreateEmployeeDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                throw new EmployeeNameIsNullOrEmptyException();
+
+            if (dto.Age < 18)
+                throw new EmployeeUnderAgeException();
+
+            if (dto.Salary <= 0)
+                throw new EmployeeSalaryMustBeSpecifiedExcpetion();
+
+            // I don't have department in my dto, but would implement same as name validation.
+
+            var employee = new Employee
+            {
+                Name = dto.Name,
+                Age = dto.Age,
+                Salary = dto.Salary,
+                TenantId = _tenantProvider.TenantId
+            };
+
+            _repository.Add(employee);
+        }
+
+        public void UpdateEmployee(int id, UpdateEmployeeDto dto)
         {
             _logger.LogInformation(
                 "Attempting to update employee {EmployeeId}.",
@@ -202,5 +226,33 @@ namespace EmployeeManagement.Services
                 "Employee {EmployeeId} cache removed.",
                 id);
         }
+
+        #region "Practice work"
+
+        public EmployeeStatistics GetStatistics(List<EmployeePractice> employees)
+        {
+            var activeEmployees = employees
+                .Where(x => x.IsActive)
+                .ToList();
+
+            return new EmployeeStatistics
+            {
+                ActiveEmployeeCount = activeEmployees.Count,
+
+                AverageSalary = activeEmployees.Any()
+                    ? activeEmployees.Average(x => x.Salary)
+                    : 0,
+
+                HighestPaidEmployee = activeEmployees
+                    .OrderByDescending(x => x.Salary)
+                    .FirstOrDefault(),
+
+                EmployeesPerDepartment = employees
+                    .GroupBy(x => x.Department)
+                    .ToDictionary(g => g.Key, g => g.Count())
+            };
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using EmployeeManagement.DTOs;
 using EmployeeManagement.Interfaces;
+using EmployeeManagement.Models;
 using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -75,6 +76,30 @@ namespace EmployeeManagement.Controllers.V1
                 First = _instance1.InstanceId,
                 Second = _instance2.InstanceId
             });
+        }
+
+        [AllowAnonymous]
+        public IActionResult GetStatistics()
+        {
+            var employees = new List<EmployeePractice>
+            {
+                new EmployeePractice { Id = 1, Name = "John", Department = "IT", Salary = 45000, IsActive = true },
+                new EmployeePractice { Id = 2, Name = "Sarah", Department = "HR", Salary = 38000, IsActive = true },
+                new EmployeePractice { Id = 3, Name = "Mike", Department = "IT", Salary = 62000, IsActive = false },
+                new EmployeePractice { Id = 4, Name = "Jane", Department = "Finance", Salary = 71000, IsActive = true },
+                new EmployeePractice { Id = 5, Name = "David", Department = "IT", Salary = 52000, IsActive = true },
+                new EmployeePractice { Id = 6, Name = "Amy", Department = "HR", Salary = 47000, IsActive = false }
+            };
+
+            return Ok(_service.GetStatistics(employees));
+        }
+
+        [HttpPost("CreateEmployeePractice")]
+        public async Task<IActionResult> CreateEmployeePractice(CreateEmployeeDto dto)
+        {
+            await _service.CreateEmployee(dto);
+
+            return Created();
         }
     }
 }

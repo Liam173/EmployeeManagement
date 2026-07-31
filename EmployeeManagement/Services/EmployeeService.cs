@@ -112,6 +112,25 @@ namespace EmployeeManagement.Services
             return dto;
         }
 
+        public async Task<List<EmployeeDto>> SearchEmployees(SearchEmployeeDto dto)
+        {
+            var employees = _repository.SearchEmployees(_tenantProvider.TenantId, dto.Name, dto.MinimumSalary);
+
+            var employeeDtos = new List<EmployeeDto>();
+
+            foreach (var employee in employees)
+            {
+                employeeDtos.Add(new EmployeeDto
+                {
+                    Id = employee.Id,
+                    Name = employee.Name,
+                    Age = employee.Age
+                });
+            }
+
+            return employeeDtos;
+        }
+
         public async Task AddEmployee(CreateEmployeeDto dto)
         {
             _logger.LogInformation(

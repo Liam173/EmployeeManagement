@@ -112,7 +112,7 @@ namespace EmployeeManagement.Services
             return dto;
         }
 
-        public async Task AddEmployee(CreateEmployeeDto dto) 
+        public async Task AddEmployee(CreateEmployeeDto dto)
         {
             _logger.LogInformation(
                 "Creating new employee.");
@@ -137,7 +137,7 @@ namespace EmployeeManagement.Services
                     employee.Name));
         }
 
-        public void UpdateEmployee(int id, UpdateEmployeeDto dto) 
+        public void UpdateEmployee(int id, UpdateEmployeeDto dto)
         {
             _logger.LogInformation(
                 "Attempting to update employee {EmployeeId}.",
@@ -202,5 +202,26 @@ namespace EmployeeManagement.Services
                 "Employee {EmployeeId} cache removed.",
                 id);
         }
+
+        #region "Practice work"
+
+        public EmployeeStatistics GetStatistics(List<EmployeePractice> employees)
+        {
+            var statistic = new EmployeeStatistics();
+
+            statistic.ActiveEmployeeCount = employees.Count(x => x.IsActive);
+
+            statistic.AverageSalary = employees.Where(x => x.IsActive).Average(x => x.Salary);
+
+            var highestPaidAmount = employees.Where(x => x.IsActive).Max(x => x.Salary);
+
+            statistic.HighestPaidEmployee = employees.FirstOrDefault(x => x.IsActive && x.Salary == highestPaidAmount);
+
+            statistic.EmployeesPerDepartment = employees.GroupBy(x => x.Department).ToDictionary(g => g.Key, g => g.Count());
+
+            return statistic;
+        }
+
+        #endregion
     }
 }

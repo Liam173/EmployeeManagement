@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.Models;
+﻿using EmployeeManagement.DTOs;
+using EmployeeManagement.Models;
 
 namespace EmployeeManagement.Interfaces
 {
@@ -7,6 +8,8 @@ namespace EmployeeManagement.Interfaces
         List<Employee> GetAll(int tenantId);
 
         Employee? GetById(int id, int tenantId);
+
+        List<Employee> SearchEmployees(int tenantId, SearchEmployeeDto dto);
 
         void Add(Employee employee);
 

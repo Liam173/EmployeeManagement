@@ -1,4 +1,5 @@
 ﻿using EmployeeManagement.Data;
+using EmployeeManagement.DTOs;
 using EmployeeManagement.Exceptions;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
@@ -28,6 +29,16 @@ namespace EmployeeManagement.Repositories
             return _context.Employees.FirstOrDefault(x =>
                 x.Id == id &&
                 x.TenantId == tenantId);
+        }
+
+        public List<Employee> SearchEmployees(int tenantId, SearchEmployeeDto dto)
+        {
+            // I don't have IsActive or Department in my model for Employee
+            return _context.Employees
+                .AsNoTracking()
+                .Where(x => x.TenantId == tenantId
+                    && (x.Name.ToLower().Contains(dto.Name.ToLower()) || (x.Salary >= dto.MinimumSalary)))
+                .ToList();
         }
 
         public void Add(Employee employee)

@@ -93,5 +93,13 @@ namespace EmployeeManagement.Controllers.V1
 
             return Ok(_service.GetStatistics(employees));
         }
+
+        [HttpPost("CreateEmployeePractice")]
+        public async Task<IActionResult> CreateEmployeePractice(CreateEmployeeDto dto)
+        {
+            await _service.CreateEmployee(dto);
+
+            return Created();
+        }
     }
 }

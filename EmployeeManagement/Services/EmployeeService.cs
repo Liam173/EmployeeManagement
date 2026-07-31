@@ -137,6 +137,30 @@ namespace EmployeeManagement.Services
                     employee.Name));
         }
 
+        public async Task CreateEmployee(CreateEmployeeDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.Name))
+                throw new EmployeeNameIsNullOrEmptyException();
+
+            if (dto.Age < 18)
+                throw new EmployeeUnderAgeException();
+
+            if (dto.Salary <= 0)
+                throw new EmployeeSalaryMustBeSpecifiedExcpetion();
+
+            // I don't have department in my dto, but would implement same as name validation.
+
+            var employee = new Employee
+            {
+                Name = dto.Name,
+                Age = dto.Age,
+                Salary = dto.Salary,
+                TenantId = _tenantProvider.TenantId
+            };
+
+            _repository.Add(employee);
+        }
+
         public void UpdateEmployee(int id, UpdateEmployeeDto dto)
         {
             _logger.LogInformation(
@@ -207,19 +231,26 @@ namespace EmployeeManagement.Services
 
         public EmployeeStatistics GetStatistics(List<EmployeePractice> employees)
         {
-            var statistic = new EmployeeStatistics();
+            var activeEmployees = employees
+                .Where(x => x.IsActive)
+                .ToList();
 
-            statistic.ActiveEmployeeCount = employees.Count(x => x.IsActive);
+            return new EmployeeStatistics
+            {
+                ActiveEmployeeCount = activeEmployees.Count,
 
-            statistic.AverageSalary = employees.Where(x => x.IsActive).Average(x => x.Salary);
+                AverageSalary = activeEmployees.Any()
+                    ? activeEmployees.Average(x => x.Salary)
+                    : 0,
 
-            var highestPaidAmount = employees.Where(x => x.IsActive).Max(x => x.Salary);
+                HighestPaidEmployee = activeEmployees
+                    .OrderByDescending(x => x.Salary)
+                    .FirstOrDefault(),
 
-            statistic.HighestPaidEmployee = employees.FirstOrDefault(x => x.IsActive && x.Salary == highestPaidAmount);
-
-            statistic.EmployeesPerDepartment = employees.GroupBy(x => x.Department).ToDictionary(g => g.Key, g => g.Count());
-
-            return statistic;
+                EmployeesPerDepartment = employees
+                    .GroupBy(x => x.Department)
+                    .ToDictionary(g => g.Key, g => g.Count())
+            };
         }
 
         #endregion

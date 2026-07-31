@@ -45,9 +45,9 @@ namespace EmployeeManagement.Controllers.V1
 
         [HttpGet("SearchEmployees")]
         [ProducesResponseType<List<EmployeeDto>>(StatusCodes.Status200OK)]
-        public IActionResult SearchEmployees(SearchEmployeeDto dto)
+        public async Task<IActionResult> SearchEmployees(SearchEmployeeDto dto)
         {
-            return Ok(_service.SearchEmployees());
+            return Ok(await _service.SearchEmployees(dto));
         }
 
         [HttpPost("CreateEmployee")]

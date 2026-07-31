@@ -31,14 +31,27 @@ namespace EmployeeManagement.Repositories
                 x.TenantId == tenantId);
         }
 
-        public List<Employee> SearchEmployees(int tenantId, SearchEmployeeDto dto)
+        public List<Employee> SearchEmployees(int tenantId, string? name, decimal? minimumSalary)
         {
-            // I don't have IsActive or Department in my model for Employee
-            return _context.Employees
+            var query = _context.Employees
                 .AsNoTracking()
-                .Where(x => x.TenantId == tenantId
-                    && (x.Name.ToLower().Contains(dto.Name.ToLower()) || (x.Salary >= dto.MinimumSalary)))
-                .ToList();
+                .Where(x => x.TenantId == tenantId);
+
+            // I don't have IsActive or Department in my model for Employee
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                query = query.Where(x =>
+                    x.Name.Contains(name));
+            }
+
+            if (minimumSalary.HasValue)
+            {
+                query = query.Where(x =>
+                    x.Salary >= minimumSalary.Value);
+            }
+
+            return query.ToList();
         }
 
         public void Add(Employee employee)

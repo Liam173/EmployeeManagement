@@ -9,7 +9,7 @@ namespace EmployeeManagement.Interfaces
 
         Employee? GetById(int id, int tenantId);
 
-        List<Employee> SearchEmployees(int tenantId, SearchEmployeeDto dto);
+        List<Employee> SearchEmployees(int tenantId, string? name, decimal? minimumSalary);
 
         void Add(Employee employee);
 

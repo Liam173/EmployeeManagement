@@ -114,7 +114,7 @@ namespace EmployeeManagement.Services
 
         public async Task<List<EmployeeDto>> SearchEmployees(SearchEmployeeDto dto)
         {
-            var employees = _repository.SearchEmployees(_tenantProvider.TenantId, dto);
+            var employees = _repository.SearchEmployees(_tenantProvider.TenantId, dto.Name, dto.MinimumSalary);
 
             var employeeDtos = new List<EmployeeDto>();
 

@@ -139,7 +139,7 @@ namespace EmployeeManagement.Services
 
         public async Task CreateEmployee(CreateEmployeeDto dto)
         {
-            if (string.IsNullOrEmpty(dto.Name))
+            if (string.IsNullOrWhiteSpace(dto.Name))
                 throw new EmployeeNameIsNullOrEmptyException();
 
             if (dto.Age < 18)

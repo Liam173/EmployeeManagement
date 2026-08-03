@@ -5,6 +5,8 @@ namespace EmployeeManagement.Services
 {
     public class FinanceBonusCalculator : IBonusCalculator
     {
+        public string Department => "Finance";
+
         public decimal CalculateBonus(Employee employee)
         {
             // Calculate bonus based on Finance department criteria

@@ -16,6 +16,7 @@ namespace EmployeeManagement.Services
         private readonly IMemoryCache _cache;
         private readonly IEventPublisher _eventPublisher;
         private readonly ITenantProvider _tenantProvider;
+        private readonly INotificationService _notificationService;
 
         public static class CacheKeys
         {
@@ -34,7 +35,8 @@ namespace EmployeeManagement.Services
             ILogger<EmployeeService> logger,
             IMemoryCache cache,
             IEventPublisher eventPublisher,
-            ITenantProvider tenantProvider)
+            ITenantProvider tenantProvider,
+            INotificationService notificationService)
         {
             _repository = repository;
             _mapper = mapper;
@@ -42,6 +44,7 @@ namespace EmployeeManagement.Services
             _cache = cache;
             _eventPublisher = eventPublisher;
             _tenantProvider = tenantProvider;
+            _notificationService = notificationService;
         }
 
         public List<EmployeeDto> GetAllEmployees()
@@ -141,6 +144,9 @@ namespace EmployeeManagement.Services
             employee.TenantId = _tenantProvider.TenantId;
 
             _repository.Add(employee);
+
+            _notificationService.SendNotification(
+                $"New employee {employee.Name} has been added.");
 
             _logger.LogInformation(
                 "Employee was added successfully.");

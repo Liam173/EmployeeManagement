@@ -67,12 +67,8 @@ builder.Services.AddHostedService<EmailBackgroundService>();
 builder.Services.AddSingleton<FakeEmailQueueService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IEventPublisher, EventPublisher>();
-builder.Services.AddScoped<
-    IEventHandler<EmployeeCreatedEvent>,
-    EmployeeCreatedEmailHandler>();
-builder.Services.AddScoped<
-    IEventHandler<EmployeeCreatedEvent>,
-    EmployeeCreatedAuditHandler>();
+builder.Services.AddScoped<IEventHandler<EmployeeCreatedEvent>, EmployeeCreatedEmailHandler>();
+builder.Services.AddScoped<IEventHandler<EmployeeCreatedEvent>,  EmployeeCreatedAuditHandler>();
 builder.Services
     .AddApiVersioning(options =>
     {
@@ -107,6 +103,11 @@ builder.Services
     });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
+builder.Services.AddScoped<INotificationService, EmailNotificationService>();
+builder.Services.AddScoped<IBonusCalculator, ITBonusCalculator>();
+builder.Services.AddScoped<IBonusCalculator, HRBonusCalculator>();
+builder.Services.AddScoped<IBonusCalculator, FinanceBonusCalculator>();
+builder.Services.AddScoped<BonusCalculatorFactory>();
 
 var app = builder.Build();
 

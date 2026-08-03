@@ -107,6 +107,7 @@ builder.Services
     });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
+builder.Services.AddScoped<INotificationService, EmailNotificationService>();
 
 var app = builder.Build();
 
